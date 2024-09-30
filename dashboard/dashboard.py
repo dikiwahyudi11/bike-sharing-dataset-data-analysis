@@ -6,6 +6,9 @@ import streamlit as st
 # Set style for the seaborn plots
 sns.set(style='dark')
 
+# Define a color palette for consistent styling
+palette = sns.color_palette("viridis", 10)
+
 def create_daily_rentals_df(df):
     daily_rentals_df = df.resample(rule='D', on='dteday').agg({
         "cnt": "sum",
@@ -104,7 +107,7 @@ with tabs[0]:
         daily_rentals_df["total_rentals"],
         marker='o', 
         linewidth=2,
-        color="#4CAF50"
+        color=palette[0]  # Use the first color from the palette
     )
     ax.set_title("Daily Bike Rental Trends", fontsize=24)
     ax.tick_params(axis='y', labelsize=20)
@@ -115,8 +118,20 @@ with tabs[0]:
     # Rentals by Hour
     st.subheader("Rentals by Hour of the Day")
 
+    # Highlight max and min in the bar plot
+    max_rentals = by_hour_df['cnt'].max()
+    min_rentals = by_hour_df['cnt'].min()
+
     fig, ax = plt.subplots(figsize=(12, 6))
-    sns.barplot(x="hr", y="cnt", data=by_hour_df, palette='coolwarm', ax=ax)
+    bars = ax.bar("hr", "cnt", data=by_hour_df, color=palette[1])
+    
+    # Highlight max and min bars
+    for bar in bars:
+        if bar.get_height() == max_rentals:
+            bar.set_color(palette[2])  # Highlight max in a different color
+        elif bar.get_height() == min_rentals:
+            bar.set_color(palette[3])  # Highlight min in a different color
+
     ax.set_title("Total Rentals by Hour", fontsize=20)
     ax.set_ylabel("Total Rentals", fontsize=14)
     ax.set_xlabel("Hour", fontsize=14)
@@ -131,8 +146,8 @@ with tabs[0]:
     }).reset_index()
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    ax.bar(stacked_df['weekday'], stacked_df['casual'], label='Casual Rentals', color='blue')
-    ax.bar(stacked_df['weekday'], stacked_df['registered'], bottom=stacked_df['casual'], label='Registered Rentals', color='orange')
+    ax.bar(stacked_df['weekday'], stacked_df['casual'], label='Casual Rentals', color=palette[1])
+    ax.bar(stacked_df['weekday'], stacked_df['registered'], bottom=stacked_df['casual'], label='Registered Rentals', color=palette[2])
     ax.set_title("Stacked Bar Chart of Casual and Registered Rentals by Day", fontsize=20)
     ax.set_ylabel("Total Rentals", fontsize=14)
     ax.set_xlabel("Day of the Week", fontsize=14)
@@ -144,7 +159,18 @@ with tabs[1]:
     st.subheader("Rentals by Day of the Week")
 
     fig, ax = plt.subplots(figsize=(12, 6))
-    sns.barplot(x="weekday", y="cnt", data=by_weekday_df, palette='magma', ax=ax)
+    max_weekday_rentals = by_weekday_df['cnt'].max()
+    min_weekday_rentals = by_weekday_df['cnt'].min()
+
+    bars = sns.barplot(x="weekday", y="cnt", data=by_weekday_df, palette=palette[4:8], ax=ax)
+
+    # Highlight max and min in the bar plot
+    for bar in bars.patches:
+        if bar.get_height() == max_weekday_rentals:
+            bar.set_facecolor(palette[8])  # Highlight max in a different color
+        elif bar.get_height() == min_weekday_rentals:
+            bar.set_facecolor(palette[9])  # Highlight min in a different color
+
     ax.set_title("Total Rentals by Day of the Week", fontsize=20)
     ax.set_ylabel("Total Rentals", fontsize=14)
     ax.set_xlabel("Weekday", fontsize=14)
@@ -155,7 +181,18 @@ with tabs[2]:
     st.subheader("Rentals by Season")
 
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(x="season", y="total_rentals", data=seasonal_df, palette='viridis', ax=ax)
+    bars = sns.barplot(x="season", y="total_rentals", data=seasonal_df, palette=palette[0:4], ax=ax)
+
+    # Highlight max and min in the bar plot
+    max_seasonal_rentals = seasonal_df['total_rentals'].max()
+    min_seasonal_rentals = seasonal_df['total_rentals'].min()
+
+    for bar in bars.patches:
+        if bar.get_height() == max_seasonal_rentals:
+            bar.set_facecolor(palette[8])  # Highlight max in a different color
+        elif bar.get_height() == min_seasonal_rentals:
+            bar.set_facecolor(palette[9])  # Highlight min in a different color
+
     ax.set_title("Total Rentals by Season", fontsize=20)
     ax.set_ylabel("Total Rentals", fontsize=14)
     ax.set_xlabel("Season", fontsize=14)
