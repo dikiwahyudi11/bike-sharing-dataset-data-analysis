@@ -8,7 +8,7 @@ This project analyzes the **Bike Sharing Dataset** to explore trends in bike ren
 - Simple clustering analysis
 
 ## Technologies:
-- Python, Pandas, Matplotlib, Plotly
+- Python, Pandas, Matplotlib, Seaborn
 - Streamlit for dashboard deployment
 
 ## How to Run:
