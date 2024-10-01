@@ -17,4 +17,5 @@ This project analyzes the **Bike Sharing Dataset** to explore trends in bike ren
    ```bash
    pip install -r requirements.txt
 3. Run the Streamlit app:
-   `streamlit run dashboard.py`
+   ```bash
+   streamlit run dashboard.py
