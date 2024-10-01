@@ -46,7 +46,7 @@ def create_heatmap_df(df):
     return heatmap_pivot
 
 # Load cleaned data
-all_df = pd.read_csv("preprocessed_hour.csv")
+all_df = pd.read_csv("dashboard/preprocessed_hour.csv")
 
 # Convert 'dteday' to datetime and sort
 all_df['dteday'] = pd.to_datetime(all_df['dteday'])
@@ -59,7 +59,7 @@ max_date = all_df["dteday"].max()
 
 with st.sidebar:
     # Add company logo
-    st.image("logo.jpg")
+    st.image("dashboard/logo.jpg")
     
     # Get start_date & end_date from date_input
     start_date, end_date = st.date_input(
